@@ -7,7 +7,7 @@ Publishing and subscribing to notifications can be decoupled easily, so bring yo
 
 ## Installing and Running
 
-For plain old gem install: 
+For plain old gem install:
 
     gem install chatterbox
 
@@ -43,7 +43,7 @@ You can configure defaults for the email service:
 
     Chatterbox::Services::Email.configure({
       :to => "joe@example.com",
-      :from => "jane@example.com", 
+      :from => "jane@example.com",
       :summary_prefix => "[my-prefix] "
     })
 
@@ -71,9 +71,22 @@ Sends:
     From: reply@example.com
     Subject: [my-prefix] my subject
 
+You can also pass a block to notify in order to override the service that gets used
+to deliver the notification...
+
+    Chatterbox::Publishers.register do |notice|
+      Twitter.deliver(notice)
+    end
+
+    Chatterbox.notify(:summary => "my subject") do |via|
+      via["Twitter"] => {:twitter_account => "someone@example.com"}
+    end
+
+This will send the notifiction via Twitter and not send it via email.
+
 ## Exception Notification
 
-One of the most handy use cases Chatterbox was developed for is exception notification.  Chatterbox can be configured for Rails exception catching from controllers, and can be used in a plain Ruby app as well.  
+One of the most handy use cases Chatterbox was developed for is exception notification.  Chatterbox can be configured for Rails exception catching from controllers, and can be used in a plain Ruby app as well.
 
 To setup Chatterbox for Rails exception notification, install it as a gem with the instructions above, then configure it inside an initializer:
 
@@ -115,3 +128,4 @@ Contributors
 Copyrights
 ------------
 Copyright &copy; 2008-2009 Rob Sanheim under the MIT license
+
